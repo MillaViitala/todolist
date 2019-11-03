@@ -1,0 +1,82 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>TO DO -list</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<style>
+	
+	
+	 body {
+            font-family: 'Calibri', serif;
+            font-size: 15pt;
+         }
+         
+         
+         
+         
+	
+     </style> 
+     
+</head>
+<body>
+
+
+	<h1>TO DO -list</h1>
+	<div class="col-md-10">
+		<h3 th:inline="text">Welcome
+			[[${#httpServletRequest.remoteUser}]]</h3>
+	</div>
+	
+	
+	<table class="table table-hover table-sm">
+	 <thead class="thead-dark">
+		<tr>
+			<th>TO DO</th>
+			<th>Importance</th>
+			<th>Completion</th>
+			<th>Category</th>
+			<th sec:authorize="hasAuthority('ADMIN')"></th>
+		</tr>
+		 </thead>
+		<tr th:each="task : ${tasks}">
+			<td th:text="${task.taskname}"></td>
+			<td th:text="${task.importance}"></td>
+			<td th:text="${task.complete}"></td>
+			<td th:text="${task.category.name}"></td>
+			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${task.id})}" class="btn btn-xs btn-danger">Delete</a></td>
+			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/edit/{id}(id=${task.id})}" class="btn btn-xs btn-success">Edit</a></td>
+		</tr>
+	</table>
+	
+	<p th:style ="${isAmin} ? 'font-style: bold;' : 'font-style: italic;'"
+   th:styleappend ="${isAdmin} ? 'color: blue' : 'color: black' ">IMPORTANCE LEVELS</p>
+	<p style ="color: blue;" th:style = "${isAdmin} ? 'color: blue' : 'color: green' ">0: Don't worry, you've got time</p>
+	<p style ="color: blue;" th:style = "${isAdmin} ? 'color: blue' : 'color: #FFC300' ">1: Should maybe start looking into it</p>
+	<p style ="color: blue;" th:style = "${isAdmin} ? 'color: blue' : 'color: #EF8431' ">2: OH, it's really getting closer</p>
+	<p style ="color: blue;" th:style = "${isAdmin} ? 'color: blue' : 'color: red' ">3: DO IT NOW!!</p>
+	
+	
+	
+	
+	<a href="/add" class="btn btn-success">Add Task</a>
+	
+	<div class="col-md-8" style="padding: 20px 0">
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out" class="btn btn-sm btn-danger" />
+		</form>
+	</div>
+	
+</body>
+</html>
+
